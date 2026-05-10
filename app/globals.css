@@ -1,0 +1,174 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  /* Poyy's Creative — Cinematic Obsidian Theme */
+  --background: #000000;
+  --foreground: #f0f0ee;
+  --card: #0a0a0a;
+  --card-foreground: #f0f0ee;
+  --popover: #0a0a0a;
+  --popover-foreground: #f0f0ee;
+  --primary: #f0f0ee;
+  --primary-foreground: #000000;
+  --secondary: #111111;
+  --secondary-foreground: #f0f0ee;
+  --muted: #1a1a1a;
+  --muted-foreground: #888888;
+  --accent: #111111;
+  --accent-foreground: #f0f0ee;
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(0.577 0.245 27.325);
+  --border: #222222;
+  --input: #1a1a1a;
+  --ring: #f0f0ee;
+  --radius: 0rem;
+
+  /* Brand colors */
+  --silver: #f0f0ee;
+  --silver-dim: #aaaaaa;
+  --obsidian: #000000;
+  --brand-navy: #050a14;
+}
+
+@theme inline {
+  --font-sans: var(--font-inter);
+  --font-serif: var(--font-cormorant);
+  --font-mono: var(--font-geist-mono);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --radius-sm: calc(var(--radius));
+  --radius-md: calc(var(--radius));
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius));
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    background: transparent;
+    cursor: none;
+  }
+  body {
+    background: transparent;
+    color: var(--foreground);
+    font-family: var(--font-inter), sans-serif;
+  }
+  ::selection {
+    background: rgba(240, 240, 238, 0.2);
+    color: #f0f0ee;
+  }
+}
+
+/* Custom cursor */
+.cursor-dot {
+  width: 8px;
+  height: 8px;
+  background: #f0f0ee;
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  z-index: 99999;
+  transform: translate(-50%, -50%);
+  transition: width 0.2s, height 0.2s, background 0.2s;
+}
+
+.cursor-ring {
+  width: 36px;
+  height: 36px;
+  border: 1px solid rgba(240, 240, 238, 0.5);
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  z-index: 99998;
+  transform: translate(-50%, -50%);
+  transition: width 0.3s, height 0.3s, border-color 0.3s;
+}
+
+.cursor-dot.hover {
+  width: 12px;
+  height: 12px;
+  background: #f0f0ee;
+}
+
+.cursor-ring.hover {
+  width: 54px;
+  height: 54px;
+  border-color: rgba(240, 240, 238, 0.8);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 2px;
+}
+::-webkit-scrollbar-track {
+  background: #000;
+}
+::-webkit-scrollbar-thumb {
+  background: #333;
+}
+
+/* Allow page-specific backgrounds while keeping default transparent for home page */
+html,
+body,
+#__next {
+  background: transparent;
+}
+
+/* Mobile safe area for notched devices */
+.safe-area-inset {
+  padding-top: max(1rem, env(safe-area-inset-top));
+  padding-bottom: max(1rem, env(safe-area-inset-bottom));
+  padding-left: max(1rem, env(safe-area-inset-left));
+  padding-right: max(1rem, env(safe-area-inset-right));
+}
+
+/* Optimize touch interactions for mobile */
+@media (hover: none) and (pointer: coarse) {
+  button,
+  a,
+  [role="button"] {
+    min-height: 44px;
+    min-width: 44px;
+    padding: 0.75rem 1rem;
+  }
+
+  /* Reduce motion for better mobile experience */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  /* Improve touch feedback */
+  button:active,
+  a:active,
+  [role="button"]:active {
+    opacity: 0.8;
+  }
+}
