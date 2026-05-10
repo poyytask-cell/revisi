@@ -28,6 +28,42 @@ export function HeroSection() {
     }
   }, [])
 
+  // Force autoplay on mobile — especially iOS Safari which blocks autoplay
+  useEffect(() => {
+    const video = videoRef.current
+    if (!video) return
+
+    // Ensure muted before play attempt (required for autoplay policy)
+    video.muted = true
+    video.volume = 0
+
+    const attemptPlay = () => {
+      const playPromise = video.play()
+      if (playPromise !== undefined) {
+        playPromise.catch(() => {
+          // Autoplay was prevented — try again on first user interaction
+          const resumePlay = () => {
+            video.play().catch(() => {})
+            document.removeEventListener('touchstart', resumePlay)
+            document.removeEventListener('click', resumePlay)
+          }
+          document.addEventListener('touchstart', resumePlay, { passive: true })
+          document.addEventListener('click', resumePlay)
+        })
+      }
+    }
+
+    if (video.readyState >= 2) {
+      attemptPlay()
+    } else {
+      video.addEventListener('loadeddata', attemptPlay, { once: true })
+    }
+
+    return () => {
+      video.removeEventListener('loadeddata', attemptPlay)
+    }
+  }, [isSlowNetwork])
+
   const handleMouseMove = (e: React.MouseEvent) => {
     const rect = containerRef.current?.getBoundingClientRect()
     if (!rect) return
@@ -66,7 +102,12 @@ export function HeroSection() {
         preload="auto"
         poster="https://res.cloudinary.com/dyromez82/image/upload/v1778155109/0503_qv1lek.webp"
         className="fixed top-0 left-0 w-full h-full object-cover z-[-50]"
-        style={{ willChange: 'transform' }}
+        style={{ willChange: 'transform', pointerEvents: 'none' }}
+        // @ts-ignore – webkit-specific attribute for older iOS Safari
+        webkit-playsinline="true"
+        x5-playsinline="true"
+        x5-video-player-type="h5"
+        x5-video-player-fullscreen="false"
       >
         {!isSlowNetwork && (
           <source 
